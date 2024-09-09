@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:ui';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:todolist_v2/model/todo_list.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:todolist_v2/view/add_todo.dart';
 
 class TableList extends StatefulWidget {
   const TableList({
@@ -102,6 +102,11 @@ class _TableListState extends State<TableList> {
             fontSize: 30,
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: () => Get.to(const AddTodo()),
+              icon: const Icon(Icons.add_outlined))
+        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       body: SingleChildScrollView(
@@ -158,12 +163,7 @@ class _TableListState extends State<TableList> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          deleteState() {
-                                            setState(() {});
-                                          }
-
                                           currentIndex = index;
-                                          _show(context, index, deleteState());
                                           setState(() {});
                                         },
                                         child: Padding(
@@ -260,18 +260,20 @@ class _TableListState extends State<TableList> {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
-        height: 50,
-        width: 50,
-        child: FloatingActionButton(
-            child: const Icon(
-              Icons.add,
-              size: 30,
-            ),
-            onPressed: () {
-              floatingactionSheet();
-            }),
-      ),
+      // floatingActionButton: SizedBox(
+      //   height: 50,
+      //   width: 50,
+      //   child: FloatingActionButton(
+      //       child: const Icon(
+      //         Icons.add,
+      //         size: 30,
+      //       ),
+      //       onPressed: () {
+      //         // floatingactionSheet();
+
+      //         _buildBottomMenu();
+      //       }),
+      // ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -323,121 +325,67 @@ class _TableListState extends State<TableList> {
     );
   }
 
-  _show(context, index, setstate) {
-    String temp = todoList[index].duration;
-    String changeDate = '변경할 날짜를 선택하세요.';
-    showMaterialModalBottomSheet(
-      context: context,
-      builder: (context) => SizedBox(
-        width: 400,
-        height: 400,
-        child: SizedBox(
-          width: 400,
-          height: 350,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: const Text(
-                        '닫기',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Get.back();
-                        todoList[index].duration = choosedDate;
-                        String temp = choosedDate.substring(
-                            choosedDate.length - 4, choosedDate.length - 1);
-                        temp = temp.trim();
-                        String tempstrToday = strToday.substring(
-                            strToday.length - 2, strToday.length);
-                        tempstrToday = tempstrToday.trim();
-                        setState(() {});
-                      },
-                      child: const Text(
-                        '완료',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                todoList[index].title,
-                style:
-                    const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '기한 : $temp ~ $temp',
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      // String wantDate =
-                      int firstYear = now.year - 1;
-                      int lastYear = now.year + 5;
-                      setState(() {});
-                    },
-                    icon: const Icon(Icons.date_range),
-                  ),
-                ],
-              ),
-              Text(
-                changeDate,
-                style: const TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-            ],
+  Widget _buildBottomMenu() {
+    return Container(
+      height: 250,
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: Icon(Icons.person, color: Colors.orange),
+            title: Text('알바', style: TextStyle(color: Colors.white)),
+            onTap: () {},
           ),
-        ),
+          ListTile(
+            leading: Icon(Icons.home, color: Colors.purple),
+            title: Text('부동산', style: TextStyle(color: Colors.white)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.directions_car, color: Colors.blue),
+            title: Text('중고차', style: TextStyle(color: Colors.white)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.sell, color: Colors.deepPurple),
+            title: Text('여러 물건 팔기', style: TextStyle(color: Colors.white)),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.add, color: Colors.orange),
+            title: Text('내 물건 팔기', style: TextStyle(color: Colors.white)),
+            onTap: () {},
+          ),
+        ],
       ),
     );
   }
 
   floatingactionSheet() {
-    showCupertinoModalPopup(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => SingleChildScrollView(
-        child: CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-              onPressed: () {
-                Get.back();
-                addTodo();
-                // inputactionSheet(context, setState);
-              },
-              child: const Text('일정 추가하기'),
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-              onPressed: () => Get.back(), child: const Text('Cancel')),
-        ),
-      ),
-    );
+    // showCupertinoModalPopup(
+    //   context: context,
+    //   barrierDismissible: true,
+    //   builder: (context) => SingleChildScrollView(
+    //     child: CupertinoActionSheet(
+    //       actions: [
+    //         CupertinoActionSheetAction(
+    //           onPressed: () {
+    //             Get.back();
+    //             addTodo();
+    //             // inputactionSheet(context, setState);
+    //           },
+    //           child: const Text('일정 추가하기'),
+    //         ),
+    //       ],
+    //       cancelButton: CupertinoActionSheetAction(
+    //           onPressed: () => Get.back(), child: const Text('Cancel')),
+    //     ),
+    //   ),
+    // );
   }
 
   addTodo() {
@@ -466,63 +414,6 @@ class _TableListState extends State<TableList> {
     );
   }
 
-  inputactionSheet(context, setState) {
-    showCupertinoModalPopup(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) {
-          return CupertinoActionSheet(
-            actions: [
-              SizedBox(
-                height: 300,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 180,
-                      child: CupertinoDatePicker(
-                        initialDateTime: now,
-                        mode: CupertinoDatePickerMode.date,
-                        onDateTimeChanged: (dateTime) {
-                          setState(() {
-                            // choosedDate = dateTime.toString();
-                            choosedDate =
-                                (formatter.format(dateTime)).toString();
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CupertinoTextField(
-                        controller: inputActionController,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        placeholder: '할 일을 입력하세요',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  Get.back();
-                  _addList();
-                },
-                child: const Text('일정 추가하기'),
-              ),
-            ],
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () => Get.back(),
-              child: const Text('Cancel'),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   _addList() {
     addList = [
       TodoList(
@@ -547,156 +438,6 @@ class _TableListState extends State<TableList> {
     }
     percent = (count / todoList.length);
     textpercent = (percent * 100).toString();
-    setState(() {});
-  }
-
-  _showstatefulEditBottomSheet(context, title, index, setState) async {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return SizedBox(
-              width: 400,
-              height: 350,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: const Text(
-                            '닫기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextButton(
-                          onPressed: () {
-                            Get.back();
-                            todoList[index].duration = choosedDate;
-                            String temp = choosedDate.substring(
-                                choosedDate.length - 4, choosedDate.length - 1);
-                            temp = temp.trim();
-                            String tempstrToday = strToday.substring(
-                                strToday.length - 2, strToday.length);
-                            tempstrToday = tempstrToday.trim();
-                            if (int.parse(temp) > int.parse(tempstrToday)) {
-                              todoList.removeAt(index);
-                            }
-                          },
-                          child: const Text(
-                            '완료',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                        fontSize: 50, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        '기한 : ',
-                        style: TextStyle(
-                          fontSize: 24,
-                        ),
-                      ),
-                      Text(
-                        choosedDate,
-                        style: const TextStyle(
-                          fontSize: 24,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          // _showDatePicker(context, index, dateState());
-                        },
-                        icon: const Icon(Icons.date_range),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  _showDatePicker(context, index, setstate) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 350,
-          color: Theme.of(context).colorScheme.surface,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 250,
-                  child: CupertinoDatePicker(
-                    initialDateTime: now,
-                    mode: CupertinoDatePickerMode.date,
-                    onDateTimeChanged: (DateTime newDate) {
-                      choosedDate = viewTodayFormatter.format(newDate);
-                    },
-                  ),
-                ),
-                CupertinoButton(
-                  child: const Text('확인'),
-                  onPressed: () {
-                    Get.back();
-                    setState(() {});
-                    print(choosedDate);
-                  },
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-    return choosedDate;
-  }
-
-  dispDatePicker() async {
-    int firstYear = now.year - 1;
-    int lastYear = now.year + 5;
-    final selectedDate = await showDatePicker(
-        context: context,
-        firstDate: DateTime(firstYear),
-        lastDate: DateTime(lastYear),
-        initialDate: now,
-        initialEntryMode: DatePickerEntryMode.calendarOnly,
-        locale: const Locale('ko', 'KR'));
-    if (selectedDate != null) {
-      choosedDate = selectedDate.toString();
-    } else {
-      choosedDate = '';
-    }
     setState(() {});
   }
 
@@ -743,17 +484,12 @@ class _TableListState extends State<TableList> {
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: _focusedDay,
                   selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                  rangeStartDay: _rangeStart,
-                  rangeEndDay: _rangeEnd,
                   calendarFormat: _calendarFormat,
-                  rangeSelectionMode: _rangeSelectionMode,
                   onDaySelected: (selectedDay, focusedDay) {
                     if (!isSameDay(_selectedDay, selectedDay)) {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
-                      _rangeStart = null;
-                      _rangeEnd = null;
-                      _rangeSelectionMode = RangeSelectionMode.toggledOff;
+                      print('$_selectedDay + $_focusedDay');
                       viewToday =
                           (viewTodayFormatter.format(_selectedDay!)).toString();
                       setStateDialog(() {});
@@ -767,6 +503,7 @@ class _TableListState extends State<TableList> {
                   },
                   onPageChanged: (focusedDay) {
                     _focusedDay = focusedDay;
+                    setStateDialog(() {});
                   },
                 ),
               ),

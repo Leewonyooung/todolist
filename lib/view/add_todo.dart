@@ -2,15 +2,16 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
-class AddRestaurant extends StatefulWidget {
-  const AddRestaurant({super.key});
+class AddTodo extends StatefulWidget {
+  const AddTodo({super.key});
 
   @override
-  State<AddRestaurant> createState() => _AddRestaurantState();
+  State<AddTodo> createState() => _AddAddTodoState();
 }
 
-class _AddRestaurantState extends State<AddRestaurant> {
-  List<String> categories = Get.arguments ?? '__';
+class _AddAddTodoState extends State<AddTodo> {
+  List<String> categories = ["분류"];
+  //  Get.arguments ?? '__';
   String? selectedValue;
   late TextEditingController latitudeController;
   late TextEditingController longitudeController;
@@ -37,14 +38,15 @@ class _AddRestaurantState extends State<AddRestaurant> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: 50,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        title: const Text(
           '일정 추가',
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
       body: GestureDetector(
@@ -59,80 +61,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 720,
+                        height: 620,
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 10, 23, 5),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      '위치',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 8, 30, 8),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border: Border.all(
-                                                    color: Colors.black)),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                9,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                3,
-                                            child: TextField(
-                                              style: const TextStyle(
-                                                fontSize: 13,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                              readOnly: true,
-                                              controller: latitudeController,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              border: Border.all(
-                                                  color: Colors.black)),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              9,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              3,
-                                          child: TextField(
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                            ),
-                                            readOnly: true,
-                                            textAlign: TextAlign.center,
-                                            controller: longitudeController,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
                               child: SizedBox(
@@ -140,9 +71,13 @@ class _AddRestaurantState extends State<AddRestaurant> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       '이름',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -183,9 +118,13 @@ class _AddRestaurantState extends State<AddRestaurant> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       '전화번호',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -227,9 +166,13 @@ class _AddRestaurantState extends State<AddRestaurant> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       '분류',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -291,9 +234,13 @@ class _AddRestaurantState extends State<AddRestaurant> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       '대표음식',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -334,9 +281,13 @@ class _AddRestaurantState extends State<AddRestaurant> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       '메모',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
