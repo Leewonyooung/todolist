@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 
 class AddTodo extends StatefulWidget {
   const AddTodo({super.key});
@@ -47,6 +46,10 @@ class _AddAddTodoState extends State<AddTodo> {
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         title: const Text(
           '일정 추가',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: GestureDetector(
@@ -72,7 +75,7 @@ class _AddAddTodoState extends State<AddTodo> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '이름',
+                                      '일정',
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Theme.of(context)

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../model/todo_list.dart';
 
 class DetailList extends StatefulWidget {
@@ -16,34 +15,34 @@ class _DetailListState extends State<DetailList> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
       appBar: AppBar(
-        title: Text(widget.list[widget.index].title,
-           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold,
+        title: Text(
+          widget.list[widget.index].title,
+          style: const TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
-            onPressed: (){
-              // Get.to()
-            }, 
-            icon: const Icon(Icons.edit_note))
+              onPressed: () {
+                // Get.to()
+              },
+              icon: const Icon(Icons.edit_note))
         ],
       ),
       body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-             Column(
-                children: [
-                  // Text(
-                  //   style: TextStyle(
-                  //     fontSize: 28,
-                  //     color: Theme.of(context).colorScheme.surface,
-                  //   ),
-                  // ),
-                ],
-              ),
-          ]
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Column(
+            children: [
+              // Text(
+              //   style: TextStyle(
+              //     fontSize: 28,
+              //     color: Theme.of(context).colorScheme.surface,
+              //   ),
+              // ),
+            ],
+          ),
+        ]),
       ),
     );
   }
