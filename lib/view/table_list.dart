@@ -133,45 +133,77 @@ class _TableListState extends State<TableList> {
                               ),
                             ]),
                       ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        decoration: BoxDecoration(
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Colors.brown[50],
-                            border: Border.all(color: Colors.black)),
-                        width: 100,
-                        height: 75,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text(
-                                '오늘의 할 일',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 20),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 55,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      // color: Colors.brown[100],
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Text(
-                                    '2개',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontSize: 18,
-                                    ),
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          width: MediaQuery.of(context).size.width / 1.25,
+                          height: MediaQuery.of(context).size.height / 12,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '오늘의 할 일',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
+                                      Text(
+                                        '2개',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      )
+                                    ],
                                   ),
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '앞으로 할 일',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
+                                      Text(
+                                        '2개',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '중요한 일',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
+                                      Text(
+                                        '2개',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -184,9 +216,6 @@ class _TableListState extends State<TableList> {
                         width: 350,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(75),
-                          image: const DecorationImage(
-                              image: AssetImage('images/memo.png'),
-                              fit: BoxFit.contain),
                         ),
                         child: SizedBox(
                           height: 400,
@@ -291,20 +320,6 @@ class _TableListState extends State<TableList> {
           ],
         ),
       ),
-      // floatingActionButton: SizedBox(
-      //   height: 50,
-      //   width: 50,
-      //   child: FloatingActionButton(
-      //       child: const Icon(
-      //         Icons.add,
-      //         size: 30,
-      //       ),
-      //       onPressed: () {
-      //         // floatingactionSheet();
-
-      //         _buildBottomMenu();
-      //       }),
-      // ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -356,74 +371,10 @@ class _TableListState extends State<TableList> {
     );
   }
 
-  Widget _buildBottomMenu() {
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.person, color: Colors.orange),
-            title: const Text('알바', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.home, color: Colors.purple),
-            title: const Text('부동산', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.directions_car, color: Colors.blue),
-            title: const Text('중고차', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.sell, color: Colors.deepPurple),
-            title:
-                const Text('여러 물건 팔기', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.add, color: Colors.orange),
-            title: const Text('내 물건 팔기', style: TextStyle(color: Colors.white)),
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  floatingactionSheet() {
-    // showCupertinoModalPopup(
-    //   context: context,
-    //   barrierDismissible: true,
-    //   builder: (context) => SingleChildScrollView(
-    //     child: CupertinoActionSheet(
-    //       actions: [
-    //         CupertinoActionSheetAction(
-    //           onPressed: () {
-    //             Get.back();
-    //             addTodo();
-    //             // inputactionSheet(context, setState);
-    //           },
-    //           child: const Text('일정 추가하기'),
-    //         ),
-    //       ],
-    //       cancelButton: CupertinoActionSheetAction(
-    //           onPressed: () => Get.back(), child: const Text('Cancel')),
-    //     ),
-    //   ),
-    // );
-  }
-
   _calculateChecked() {
     int count = 0;
     for (int i = 0; i < todoList.length; i++) {
-      if (todoList[i].task == true) {
+      if (todoList[i].task == 1) {
         count++;
       }
     }
