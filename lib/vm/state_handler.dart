@@ -9,15 +9,13 @@ class StateHandler {
 
   Future<List<TodoList>> queryState() async {
     final Database db = await handler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.rawQuery('''
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+      '''
           select *
           from todolist todo, donetodolist done
-          ''');
-    return queryResult
-        .map(
-          (e) => TodoList.fromMap(e),
-        )
-        .toList();
+      '''
+    );
+    return queryResult.map((e) => TodoList.fromMap(e),).toList();
   }
 
   Future<(int, int, int)> getState(date) async{

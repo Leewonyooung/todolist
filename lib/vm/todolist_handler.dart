@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:todolist_v2/model/searchtodo.dart';
 import 'package:todolist_v2/model/todolist.dart';
 import 'package:todolist_v2/vm/database_handler.dart';
+import 'package:todolist_v2/vm/donetodolist_handler.dart';
 
 class TodolistHandler {
   DatabaseHandler handler = DatabaseHandler();
@@ -14,11 +14,7 @@ class TodolistHandler {
           from todolist
       '''
     );
-    return queryResult
-        .map(
-          (e) => TodoList.fromMap(e),
-        )
-        .toList();
+    return queryResult.map((e) => TodoList.fromMap(e),).toList();
   }
 
   Future<List<TodoList>> queryTodoListbyDate(String date) async {
@@ -28,12 +24,10 @@ class TodolistHandler {
           select *
           from todolist
           where date = '$date'
-                ORDER by serious DESC
+          ORDER by serious DESC
       '''
     );
-    return queryResult.map(
-          (e) => TodoList.fromMap(e),
-        ).toList();
+    return queryResult.map((e) => TodoList.fromMap(e),).toList();
   }
 
   Future<int> queryTodoListcount(String date) async {
@@ -49,19 +43,17 @@ class TodolistHandler {
     return result;
   }
 
-  Future<List<Searchtodo>> querysearchtodo(String keyword) async {
+  Future<List<TodoList>> querysearchtodo(String keyword) async {
     final Database db = await handler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
       '''
-          select seq, title, date
+          select *
           from todolist
           where date like "%$keyword%" 
                 or title like "%$keyword%"
       '''
     );
-    return queryResult.map(
-          (e) => Searchtodo.fromMap(e),
-        ).toList();
+    return queryResult.map((e) => TodoList.fromMap(e),).toList();
   }
 
 
@@ -89,9 +81,7 @@ Future<List<TodoList>> queryTodoListfuture(String date) async {
           where date = "$date"
       '''
     );
-    return queryResult.map(
-          (e) => TodoList.countfromMap(e),
-        ).toList();
+    return queryResult.map((e) => TodoList.countfromMap(e),).toList();
   }
 
   Future<int> insertTodoList(TodoList todolist) async {
@@ -167,6 +157,18 @@ Future<List<TodoList>> queryTodoListfuture(String date) async {
         ]
       );
       return result;
+  }
+
+
+  Future<List<TodoList>> searchtodo(String keyword) async {
+    List<TodoList> result = [];
+    TodolistHandler todolistHandler = TodolistHandler();
+    DonetodolistHandler donetodolistHandler = DonetodolistHandler();
+    List<TodoList> result1 = await donetodolistHandler.querysearchdone(keyword);
+    List<TodoList> result2 = await todolistHandler.querysearchtodo(keyword);
+    result.addAll(result1);
+    result.addAll(result2);
+    return result;
   }
 
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist_v2/main.dart';
 
@@ -35,6 +34,7 @@ class _ThemeChangerState extends State<ThemeChanger> {
             setState(() {
               _isDarkMode = val;
             });
+
             MyApp.themeNotifier.value =
                 MyApp.themeNotifier.value == ThemeMode.light
                     ? ThemeMode.dark

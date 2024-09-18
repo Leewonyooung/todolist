@@ -45,11 +45,17 @@ dependencies:
   image_picker: ^1.1.2
   get_storage: ^2.1.1
   flutter_speed_dial: ^7.0.0
-  
+  flutter_native_splash: ^2.4.1
+
   flutter_localizations:
     sdk: flutter
   table_calendar: ^3.1.2
 
+flutter_native_splash:
+  color: "#E0D3AB" # background color
+  image: assets/images/icon.png # 추가할 이미지 파일 경로를 추가
+  fullscreen: true
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

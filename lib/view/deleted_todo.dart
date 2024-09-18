@@ -86,77 +86,83 @@ class DeletedTodoState extends State<DeletedTodo> {
                           );
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 7,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color:Theme.of(context).colorScheme.primaryContainer,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 7,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 3,
                                 ),
-                                child: Card(
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(20,10,0,20),
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20,20,0,20),
                                     child: Row(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(0,10,0,0),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "제목 : ",
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).colorScheme.surface,
-                                                      fontSize: 24,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    snapshot.data![index].title,
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).colorScheme.surface,
-                                                      fontSize: 24,
-                                                    ),
-                                                  ),
-                                                ],
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "제 목 : ",
+                                              style: TextStyle(
+                                                color: Theme.of(context).colorScheme.surface,
+                                                fontSize: 24,
                                               ),
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "날짜 : ",
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).colorScheme.surface,
-                                                      fontSize: 24,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    snapshot.data![index].date,
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).colorScheme.surface,
-                                                      fontSize: 24,
-                                                    ),
-                                                  ),
-                                                ],
+                                            ),
+                                            Text(
+                                              "날짜 : ",
+                                              style: TextStyle(
+                                                color: Theme.of(context).colorScheme.surface,
+                                                fontSize: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width / 2,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                snapshot.data![index].title,
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.surface,
+                                                  fontSize: 24,
+                                                ),
+                                              ),
+                                              Text(
+                                                snapshot.data![index].date,
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.surface,
+                                                  fontSize: 24,
+                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(120,0,0,10),
-                                          child: Column(
-                                            children: [
-                                              Wastepopup(deletedtodoList: deletedtodoList),
-                                            ],
-                                          ),
-                                        )
                                       ],
                                     ),
                                   ),
-                                ),
-                              )
-                          );
+                                  Container(
+                                    padding: EdgeInsets.zero,
+                                    alignment: Alignment.topRight,
+                                    // height: 30,
+                                    width: MediaQuery.of(context).size.width / 1.1 - 
+                                          MediaQuery.of(context).size.width / 1.39,
+                                    child: StatefulBuilder(
+                                      builder: (context,StateSetter popupState) {
+                                        return Wastepopup(deletedtodoList: deletedtodoList,
+                                        );
+                                      }
+                                    ),
+                                  ),
+                              ]
+                            )
+                          )
+                        );
                         },
                       ),
                     ),

@@ -12,9 +12,7 @@ class WastebasketHandler {
         from wastebasket
       '''
     );
-    return queryResult.map(
-          (e) => Wastebasket.fromMap(e),
-        ).toList();
+    return queryResult.map((e) => Wastebasket.fromMap(e),).toList();
   }
 
   Future<int> insertdeletedTodoList(Wastebasket deletedtodolist) async {
@@ -44,8 +42,8 @@ class WastebasketHandler {
     final Database db = await handler.initializeDB();
     result = await db.rawDelete(
         """
-          delete from wastebasket
-          where seq = ?
+           delete from wastebasket
+           where seq = ?
         """,
         [
          seq

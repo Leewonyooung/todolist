@@ -4,8 +4,9 @@ FAB를 통해 연결되는 투두리스트 검색 페이지
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todolist_v2/model/todolist.dart';
+import 'package:todolist_v2/view/searchpopup.dart';
 import 'package:todolist_v2/vm/donetodolist_handler.dart';
-import 'package:todolist_v2/vm/searchtodo_handler.dart';
 import 'package:todolist_v2/vm/todolist_handler.dart';
 
 class SearchTodo extends StatefulWidget {
@@ -20,14 +21,13 @@ class _SearchTodoState extends State<SearchTodo> {
   late String keyword;
   late TodolistHandler todolistHandler;
   late DonetodolistHandler donetodolistHandler;
-  late SearchtodoHandler searchtodoHandler;
 
   @override
   void initState() {
     super.initState();
     keyword = '';
+    todolistHandler = TodolistHandler();
     keywordController = TextEditingController();
-    searchtodoHandler = SearchtodoHandler();
   }
 
   @override
@@ -100,7 +100,7 @@ class _SearchTodoState extends State<SearchTodo> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: FutureBuilder(
-            future: searchtodoHandler.searchtodo(keyword),
+            future: todolistHandler.searchtodo(keyword),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return keyword == ''?
@@ -145,61 +145,90 @@ class _SearchTodoState extends State<SearchTodo> {
                         child: ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
+                            TodoList todoList = TodoList(
+                              seq: snapshot.data![index].seq,
+                              title: snapshot.data![index].title,
+                              date: snapshot.data![index].date,
+                              serious: snapshot.data![index].serious,
+                              done: snapshot.data![index].done,
+                            );
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
+                                width: MediaQuery.of(context).size.width / 2.1,
                                 height: MediaQuery.of(context).size.height / 7,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color:Theme.of(context).colorScheme.primaryContainer,
-                                ),
-                                child: Card(
-                                  color:Theme.of(context).colorScheme.onPrimaryContainer,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "제목 : ",
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.surface,
-                                                fontSize: 24,
-                                              ),
-                                            ),
-                                            Text(
-                                              snapshot.data![index].title,
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.surface,
-                                                fontSize: 24,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "날짜 : ",
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.surface,
-                                                fontSize: 24,
-                                              ),
-                                            ),
-                                            Text(
-                                              snapshot.data![index].date,
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.surface,
-                                                fontSize: 24,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.primaryContainer,
+                                    width: 3
                                   ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  color:Theme.of(context).colorScheme.onPrimaryContainer,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(20,20,0,20),
+                                      child: Row(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "제 목 : ",
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.surface,
+                                                  fontSize: 24,
+                                                ),
+                                              ),
+                                              Text(
+                                                "날짜 : ",
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.surface,
+                                                  fontSize: 24,
+                                                ),
+                                              ),
+                                              
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width / 2,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  snapshot.data![index].title,
+                                                  style: TextStyle(
+                                                    color: Theme.of(context).colorScheme.surface,
+                                                    fontSize: 24,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  snapshot.data![index].date,
+                                                  style: TextStyle(
+                                                    color: Theme.of(context).colorScheme.surface,
+                                                    fontSize: 24,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.topRight,
+                                      // height: 30,
+                                     width: MediaQuery.of(context).size.width / 1.1 - 
+                                          MediaQuery.of(context).size.width / 1.39,
+                                      child: StatefulBuilder(
+                                        builder: (context,StateSetter popupState) {
+                                          return Searchpopup(todoList: todoList);
+                                        }
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               )
                             );

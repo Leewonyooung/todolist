@@ -67,7 +67,7 @@ class _SettingsState extends State<Settings> {
                 child: Row(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(20),
                       child: CircleAvatar(
                         radius: 40,
                         child: Icon(Icons.person),
@@ -121,7 +121,7 @@ class _SettingsState extends State<Settings> {
                         style: TextButton.styleFrom(
                           alignment: Alignment.centerLeft,
                           minimumSize: Size(
-                            MediaQuery.of(context).size.width/1.4, 
+                            MediaQuery.of(context).size.width/1.5, 
                             MediaQuery.of(context).size.height/16,
                           )
                         ),
@@ -258,6 +258,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                       ),
+                      Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.surface,)
                     ],
                   ),
                 ),
@@ -296,7 +297,7 @@ class _SettingsState extends State<Settings> {
                         style: TextButton.styleFrom(
                           alignment: Alignment.centerLeft,
                           minimumSize: Size(
-                            MediaQuery.of(context).size.width/1.4, 
+                            MediaQuery.of(context).size.width/1.5, 
                             MediaQuery.of(context).size.height/16,
                           )
                         ),
@@ -311,11 +312,13 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                       ),
+                      Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.surface,)
                     ],
                   ),
                 ),
               ),
             ), 
+            
           ],
         ),
       ),

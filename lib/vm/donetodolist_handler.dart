@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:todolist_v2/model/donetodolist.dart';
-import 'package:todolist_v2/model/searchtodo.dart';
+import 'package:todolist_v2/model/todolist.dart';
 import 'package:todolist_v2/vm/database_handler.dart';
 
 class DonetodolistHandler {
@@ -13,28 +13,20 @@ class DonetodolistHandler {
           from donetodolist
           where date = "$date"
           ''');
-    return queryResult
-        .map(
-          (e) => Donetodolist.fromMap(e),
-        )
-        .toList();
+    return queryResult.map((e) => Donetodolist.fromMap(e),).toList();
   }
 
-  Future<List<Searchtodo>> querysearchdone(String keyword) async {
+  Future<List<TodoList>> querysearchdone(String keyword) async {
     final Database db = await handler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery('''
           select 
-                seq, title, date
+                *
           from donetodolist
           where 
                 date like "%$keyword%" or
                 title like "%$keyword%"
           ''');
-    return queryResult
-        .map(
-          (e) => Searchtodo.fromMap(e),
-        )
-        .toList();
+    return queryResult.map((e) => TodoList.fromMap(e)).toList();
   }
 
 
