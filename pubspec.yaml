@@ -40,6 +40,11 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   fluttertoast: ^8.2.6
   dropdown_button2: ^2.3.9
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  image_picker: ^1.1.2
+  get_storage: ^2.1.1
+  flutter_speed_dial: ^7.0.0
   
   flutter_localizations:
     sdk: flutter

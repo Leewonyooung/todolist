@@ -1,11 +1,22 @@
+/*
+메인 페이지
+*/
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'dart:async';
-import 'dart:ui';
-import 'package:todolist_v2/model/todo_list.dart';
+import 'package:todolist_v2/model/todolist.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todolist_v2/view/add_todo.dart';
+import 'package:todolist_v2/view/complete_card.dart';
+import 'package:todolist_v2/view/fab.dart';
+import 'package:todolist_v2/view/settings.dart';
+import 'package:todolist_v2/view/table_status.dart';
+import 'package:todolist_v2/view/todo_card.dart';
+import 'package:todolist_v2/vm/donetodolist_handler.dart';
+import 'package:todolist_v2/vm/state_handler.dart';
+import 'package:todolist_v2/vm/todolist_handler.dart';
+import 'package:todolist_v2/vm/user_handler.dart';
 
 class TableList extends StatefulWidget {
   const TableList({
@@ -13,31 +24,22 @@ class TableList extends StatefulWidget {
   });
 
   @override
-  State<TableList> createState() => _TableListState();
+  State<TableList> createState() => TableListState();
 }
 
-class _TableListState extends State<TableList> {
-  late TextEditingController startDateController;
-  late TextEditingController endDateController;
-  late TextEditingController inputActionController;
-  late TextEditingController inputDateController;
-  late TextEditingController searchController;
+class TableListState extends State<TableList> {
+  final box = GetStorage();
+  late UserHandler userHandler;
+  late TodolistHandler todolistHandler;
+  late DonetodolistHandler donetodolistHandler;
   late List<TodoList> todoList;
-  late String strToday;
+  late List<TodoList> seriousList;
   late List<String> today;
-  late double percent;
-  late String textpercent;
-  late Timer _timer;
-  late String viewToday;
-  late List<TodoList> addList;
   late DateTime now;
+  late String viewToday;
   late DateFormat viewTodayFormatter;
-  late DateFormat formatter;
-  late int currentIndex;
-  late String choosedDate;
-  late String checkDate;
-  late String startDate;
-  late String endDate;
+  late String date;
+  late StateHandler stateHandler;
   // Calendar
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -46,40 +48,39 @@ class _TableListState extends State<TableList> {
   @override
   void initState() {
     super.initState();
-    startDate = '';
-    endDate = '';
-    checkDate = '';
-    currentIndex = 0;
-    startDateController = TextEditingController();
-    endDateController = TextEditingController();
-    searchController = TextEditingController();
-    inputActionController = TextEditingController();
-    inputDateController = TextEditingController();
-    addList = [];
+    date = DateTime.now().year.toString().padLeft(4, '0') +
+            DateTime.now().month.toString().padLeft(2, '0') +
+            DateTime.now().day.toString().padLeft(2, '0');
+    initStorage();
+    stateHandler = StateHandler();
+    userHandler = UserHandler();
+    donetodolistHandler = DonetodolistHandler();
+    seriousList = [];
+    todolistHandler = TodolistHandler();
+    firstRun();
     now = DateTime.now();
     viewTodayFormatter = DateFormat('yy년 MM월 dd일');
-    choosedDate = (viewTodayFormatter.format(now)).toString();
-    formatter = DateFormat('yyyy-MM-dd');
     viewToday = (viewTodayFormatter.format(now)).toString();
-    strToday = (formatter.format(now)).toString();
-    today = strToday.split('-');
     todoList = [];
-    percent = 0;
-    textpercent = '0';
-    _timer = Timer.periodic(
-      const Duration(seconds: 2),
-      (timer) {
-        if (isRunningOnPlatformThread) {
-          timer.cancel();
-        }
-        strToday = formatter.format(now);
-      },
-    );
+  }
+
+  initStorage() {
+    if (box.read('state') == '1') {
+      return;
+    } else {
+      box.write('state', '0');
+    }
+  }
+
+  firstRun() async {
+    if (box.read('state') == '0') {
+      await userHandler.initUser();
+      box.write('state', '1');
+    } else {}
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
   }
 
@@ -99,329 +100,100 @@ class _TableListState extends State<TableList> {
         ),
         actions: [
           IconButton(
-              onPressed: () => Get.to(const AddTodo()),
-              icon: const Icon(Icons.add_outlined))
+            onPressed: () => Get.to(const Settings(), ),
+            icon: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(
+                Icons.settings_outlined,
+                color: Theme.of(context).colorScheme.onSurface,
+                size: 30,
+              ),
+            ),
+          ),
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                child: GestureDetector(
-                                  onTap: () => popWindow(context, '날짜선택'),
-                                  child: Text(
-                                    viewToday,
-                                    style: const TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+      body: Column(
+        children: [
+          Center(
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: (){
+                                popWindow(context,);
+                                setState(() {});
+                              },
+                              child: Text(
+                                viewToday,
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
                               ),
-                            ]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          width: MediaQuery.of(context).size.width / 1.25,
-                          height: MediaQuery.of(context).size.height / 12,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 4,
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '오늘의 할 일',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
-                                      ),
-                                      Text(
-                                        '2개',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 4,
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '앞으로 할 일',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
-                                      ),
-                                      Text(
-                                        '2개',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 4,
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '중요한 일',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
-                                      ),
-                                      Text(
-                                        '2개',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        height: 520,
-                        width: 350,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(75),
-                        ),
-                        child: SizedBox(
-                          height: 400,
-                          width: 400,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                            child: ListView.builder(
-                                itemCount: todoList.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          currentIndex = index;
-                                          setState(() {});
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              60, 0, 0, 0),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                height: 50,
-                                                width: 260,
-                                                child: SizedBox(
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 170,
-                                                        child: Text(
-                                                          '   ${todoList[index].title}',
-                                                          style: TextStyle(
-                                                            color: index % 2 ==
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .onPrimary
-                                                                : Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .onSecondary,
-                                                            fontSize: 30,
-                                                            fontFamily: 'leaf',
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                30, 0, 0, 0),
-                                                        child: Checkbox(
-                                                          fillColor:
-                                                              const WidgetStatePropertyAll(
-                                                                  Colors
-                                                                      .black38),
-                                                          checkColor:
-                                                              Colors.black,
-                                                          value: todoList[index]
-                                                                      .task ==
-                                                                  0
-                                                              ? false
-                                                              : true,
-                                                          onChanged: (value) {
-                                                            todoList[index]
-                                                                    .task =
-                                                                value! == true
-                                                                    ? 1
-                                                                    : 0;
-                                                            _calculateChecked();
-                                                            setState(() {});
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const Divider(
-                                        indent: 60,
-                                        endIndent: 30,
-                                        thickness: 2,
-                                      )
-                                    ],
-                                  );
-                                }),
+                        ]
+                      ),
+                    ),
+                    TableStatus(date: date),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '해야 할 일',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 28,
+                      ),
+                    ),
+                    TodoCard(date: date),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '완료한 일',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                        CompleteCard(date: date),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage('images/profile.png'),
-              ),
-              accountName: const Padding(
-                padding: EdgeInsets.fromLTRB(8, 12, 0, 0),
-                child: Text('이원영'),
-              ),
-              accountEmail: const Padding(
-                padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                child: Text('wylee99@naver.com'),
-              ),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onSecondary,
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40))),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.home,
-                color: Theme.of(context).colorScheme.inverseSurface,
-              ),
-              title: const Text('Home'),
-              onTap: () {},
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Divider(
-                thickness: 3,
-                height: 2,
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.settings_backup_restore,
-                color: Theme.of(context).colorScheme.inverseSurface,
-              ),
-              title: const Text('이전 항목 보기'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      floatingActionButton: const Fab(),
     );
   }
 
-  _calculateChecked() {
-    int count = 0;
-    for (int i = 0; i < todoList.length; i++) {
-      if (todoList[i].task == 1) {
-        count++;
-      }
-    }
-    percent = (count / todoList.length);
-    textpercent = (percent * 100).toString();
-    setState(() {});
-  }
-
-  popWindow(BuildContext context, String title) {
+  popWindow(BuildContext context) {
     Get.dialog(Builder(
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
-              titlePadding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-              title: SizedBox(
-                  width: 560,
-                  height: 50,
-                  child: Stack(children: [
-                    //제목
-                    Positioned(
-                        top: 15,
-                        left: 0,
-                        right: 0,
-                        child: Text(
-                          title,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        )),
-                    //닫기 버튼
-                    Positioned(
-                        width: 45,
-                        height: 45,
-                        right: 0,
-                        child: TextButton(
-                          onPressed: () {
-                            Get.back(); //창 닫기
-                          },
-                          child: const Icon(Icons.close),
-                        ))
-                  ])),
-              //화면에 표시될 영역
               content: SizedBox(
-                width: 300,
-                height: 350,
+                width: MediaQuery.of(context).size.width / 1,
+                height: MediaQuery.of(context).size.height / 2.5,
                 child: TableCalendar(
-                  locale: 'ko_KR',
+                  locale: "ko_KR",
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: _focusedDay,
@@ -451,10 +223,18 @@ class _TableListState extends State<TableList> {
               actions: [
                 TextButton(
                   onPressed: () {
+                    date = _selectedDay!.year.toString().padLeft(4, '0') +
+                          _selectedDay!.month.toString().padLeft(2, '0') +
+                          _selectedDay!.day.toString().padLeft(2, '0');
                     setState(() {});
                     Get.back();
                   },
-                  child: const Text('적용'),
+                  child: const Text(
+                    '날짜 변경',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -462,5 +242,9 @@ class _TableListState extends State<TableList> {
         );
       },
     ));
+  }
+
+  reloadData() {
+    setState(() {});
   }
 }
