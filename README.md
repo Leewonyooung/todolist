@@ -54,5 +54,9 @@ alt="IMAGE ALT TEXT HERE" width="720" height="480" border="10" /></a>
 처음 앱을 실행하면 오늘 날짜를 기준으로 날짜 선택되어 일정들을 보여줌
 Floating Action Button을 통해 추가, 검색, 휴지통 페이지 라우트
 popupmenubutton을 통해 일정의 수정, 완료, 삭제 가능
+provider를 사용하지 못해서 대안으로
+context.findAncestorStateOfType<>();를 사용하여 구현하였다.
+다만 이 방법은 페이지의 state를 private이 아닌 static으로 변경해줘야
+사용이 가능한데 보안에 문제가 있을거 같은 느낌이다... 그래서 provider를 쓰는건가?
 
 ```
